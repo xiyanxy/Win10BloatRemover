@@ -159,7 +159,7 @@ namespace Win10BloatRemover.Operations
         private void UninstallAppsOfGroup(UWPAppGroup appGroup)
         {
             string[] appsInGroup = appNamesForGroup[appGroup];
-            ui.PrintHeading($"Removing {appGroup} {(appsInGroup.Length == 1 ? "app" : "apps")}...");
+            ui.PrintHeading($"卸载 {appGroup} {(appsInGroup.Length == 1 ? "app" : "apps")}...");
             int removedAppsForGroup = 0;
             foreach (string appName in appsInGroup)
             {
@@ -186,11 +186,11 @@ namespace Win10BloatRemover.Operations
             var packages = powerShell.Run(GetAppxPackageCommand(appName));
             if (packages.Length == 0)
             {
-                ui.PrintMessage($"App {appName} is not installed.");
+                ui.PrintMessage($"App {appName} 尚未安装.");
                 return false;
             }
 
-            ui.PrintMessage($"Uninstalling app {appName}...");
+            ui.PrintMessage($"卸载app {appName}...");
             foreach (var package in packages) // some apps have both x86 and x64 variants installed
             {
                 string command = RemoveAppxPackageCommand(package.PackageFullName);
@@ -221,7 +221,7 @@ namespace Win10BloatRemover.Operations
                 .FirstOrDefault(package => package.DisplayName == appName);
             if (provisionedPackage != null)
             {
-                ui.PrintMessage($"Removing provisioned package for app {appName}...");
+                ui.PrintMessage($"删除应用的预配包 {appName}...");
                 powerShell.Run(
                     $"Remove-AppxProvisionedPackage -Online -PackageName \"{provisionedPackage.PackageName}\""
                 );
@@ -230,7 +230,7 @@ namespace Win10BloatRemover.Operations
 
         private void RestartExplorer()
         {
-            ui.PrintHeading("Restarting Explorer to avoid stale app entries in Start menu...");
+            ui.PrintHeading("重新启动资源管理器以避免在\"开始\"菜单中出现过时的应用程序条目...");
             SystemUtils.KillProcess("explorer");
             Process.Start("explorer");
         }
@@ -249,13 +249,13 @@ namespace Win10BloatRemover.Operations
             catch (Exception exc)
             {
                 ui.PrintError(
-                    $"An error occurred while performing post-uninstall/cleanup operations for app group {appGroup}: {exc.Message}");
+                    $"对应用程序组执行卸载/清理后操作时发生错误 {appGroup}: {exc.Message}");
             }
         }
 
         private void RemoveEdgeLeftovers()
         {
-            ui.PrintMessage("Removing old files...");
+            ui.PrintMessage("删除旧文件...");
             SystemUtils.TryDeleteDirectoryIfExists(
                 $@"{Env.GetFolderPath(Env.SpecialFolder.UserProfile)}\MicrosoftEdgeBackups",
                 ui
@@ -268,13 +268,13 @@ namespace Win10BloatRemover.Operations
 
         private void HideCortanaFromTaskBar()
         {
-            ui.PrintMessage("Hiding Cortana from the taskbar of current and default user...");
+            ui.PrintMessage("从当前用户和默认用户的任务栏中隐藏Cortana...");
             RegistryUtils.SetForCurrentAndDefaultUser(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCortanaButton", 0);
         }
 
         private void RemoveMapsServicesAndTasks()
         {
-            ui.PrintMessage("Removing app-related scheduled tasks and services...");
+            ui.PrintMessage("删除与应用程序相关的计划任务和服务...");
             new ScheduledTasksDisabler(new[] {
                 @"\Microsoft\Windows\Maps\MapsUpdateTask",
                 @"\Microsoft\Windows\Maps\MapsToastTask"
@@ -284,7 +284,7 @@ namespace Win10BloatRemover.Operations
 
         private void RemoveXboxServicesAndTasks()
         {
-            ui.PrintMessage("Removing app-related scheduled tasks and services...");
+            ui.PrintMessage("删除与应用程序相关的计划任务和服务...");
             new ScheduledTasksDisabler(new[] { @"Microsoft\XblGameSave\XblGameSaveTask" }, ui).Run();
             Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR", "AllowGameDVR", 0);
             serviceRemover.BackupAndRemove("XblAuthManager", "XblGameSave", "XboxNetApiSvc", "XboxGipSvc");
@@ -292,13 +292,13 @@ namespace Win10BloatRemover.Operations
 
         private void RemoveMessagingService()
         {
-            ui.PrintMessage("Removing app-related services...");
+            ui.PrintMessage("删除与应用程序相关的服务...");
             serviceRemover.BackupAndRemove("MessagingService");
         }
 
         private void RemovePaint3DContextMenuEntries()
         {
-            ui.PrintMessage("Removing Paint 3D context menu entries...");
+            ui.PrintMessage("删除3D画图上下文菜单项...");
             SystemUtils.ExecuteWindowsPromptCommand(
                 @"echo off & for /f ""tokens=1* delims="" %I in " +
                  @"(' reg query ""HKEY_CLASSES_ROOT\SystemFileAssociations"" /s /k /f ""3D Edit"" ^| find /i ""3D Edit"" ') " +
@@ -315,7 +315,7 @@ namespace Win10BloatRemover.Operations
 
         private void Remove3DObjectsFolder()
         {
-            ui.PrintMessage("Removing 3D Objects folder...");
+            ui.PrintMessage("删除3D对象文件夹...");
             using RegistryKey localMachine = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
             using RegistryKey key = localMachine.OpenSubKeyWritable(
                 @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace"
@@ -327,7 +327,7 @@ namespace Win10BloatRemover.Operations
 
         private void Remove3DPrintContextMenuEntries()
         {
-            ui.PrintMessage("Removing 3D Print context menu entries...");
+            ui.PrintMessage("删除3D打印上下文菜单项...");
             SystemUtils.ExecuteWindowsPromptCommand(
                 @"echo off & for /f ""tokens=1* delims="" %I in " +
                 @"(' reg query ""HKEY_CLASSES_ROOT\SystemFileAssociations"" /s /k /f ""3D Print"" ^| find /i ""3D Print"" ') " +
@@ -338,7 +338,7 @@ namespace Win10BloatRemover.Operations
 
         private void RestoreWindowsPhotoViewer()
         {
-            ui.PrintMessage("Setting file association with legacy photo viewer for BMP, GIF, JPEG, PNG and TIFF pictures...");
+            ui.PrintMessage("为BMP，GIF，JPEG，PNG和TIFF图片设置与旧照片查看器的文件关联...");
 
             const string PHOTO_VIEWER_SHELL_COMMAND =
                 @"%SystemRoot%\System32\rundll32.exe ""%ProgramFiles%\Windows Photo Viewer\PhotoViewer.dll"", ImageView_Fullscreen %1";
@@ -369,7 +369,7 @@ namespace Win10BloatRemover.Operations
 
         private void DisableStoreFeaturesAndServices()
         {
-            ui.PrintMessage("Writing values into the Registry...");
+            ui.PrintMessage("将值写入注册表...");
             Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "RemoveWindowsStore", 1);
             Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PushToInstall", "DisablePushToInstall", 1);
             RegistryUtils.SetForCurrentAndDefaultUser(
@@ -381,7 +381,7 @@ namespace Win10BloatRemover.Operations
                 "EnableWebContentEvaluation", 0
             );
 
-            ui.PrintMessage("Removing app-related services...");
+            ui.PrintMessage("删除与应用程序相关的服务...");
             serviceRemover.BackupAndRemove("PushToInstall");
         }
     }

@@ -18,7 +18,7 @@ namespace Win10BloatRemover.Operations
 
         public void Run()
         {
-            ui.PrintMessage("Writing values into the Registry...");
+            ui.PrintMessage("将值写入注册表...");
             AdjustPrivacySettings();
             DisableSensitiveDataSynchronization();
             DenySensitivePermissionsToApps();

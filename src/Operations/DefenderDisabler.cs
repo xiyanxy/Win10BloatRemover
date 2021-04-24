@@ -46,24 +46,24 @@ namespace Win10BloatRemover.Operations
         // This workaround will last until Windows ships with a lower version of that platform pre-installed
         private void DowngradeAntimalwarePlatform()
         {
-            ui.PrintHeading("Downgrading Defender antimalware platform...");
+            ui.PrintHeading("降级Defender杀毒软件...");
             var exitCode = SystemUtils.RunProcessBlockingWithOutput(
                 $@"{SystemUtils.GetProgramFilesFolder()}\Windows Defender\MpCmdRun.exe", "-resetplatform", ui);
 
             if (exitCode.IsNotSuccessful())
             {
                 ui.PrintWarning(
-                    "Antimalware platform downgrade failed. This is likely happened because you have already disabled Windows Defender.\n" +
-                    "If this is not your case, you can proceed anyway but be aware that Defender will not be disabled fully " +
-                    "if the antimalware platform has been updated to version 4.18.2007.8 or higher through Windows Update.");
-                ui.ThrowIfUserDenies("Do you want to continue?");
+                    "杀毒软件降级失败. 发生这种情况的可能是因为您已经禁用了Windows Defender.\n" +
+                    "如果这不是您的情况，则无论如何都可以继续进行，但是请注意，如果通过系统更新将" +
+                    "Defender更新为4.18.2007.8版或更高版本，则Defender将不会被完全禁用.");
+                ui.ThrowIfUserDenies("是否继续?");
             }
             IsRebootRecommended = true;
         }
 
         private void EditWindowsRegistryKeys()
         {
-            ui.PrintHeading("Editing keys in Windows Registry...");
+            ui.PrintHeading("在Windows注册表中编辑数据...");
 
             Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableSmartScreen", 0);
             RegistryUtils.SetForCurrentAndDefaultUser(@"SOFTWARE\Microsoft\Windows\CurrentVersion\AppHost", "EnableWebContentEvaluation", 0);
@@ -92,13 +92,13 @@ namespace Win10BloatRemover.Operations
 
         private void RemoveSecurityHealthServices()
         {
-            ui.PrintHeading("Removing Security Health services...");
+            ui.PrintHeading("删除安全服务...");
             serviceRemover.BackupAndRemove(securityHealthServices);
         }
 
         private void DisableDefenderScheduledTasks()
         {
-            ui.PrintHeading("Disabling Windows Defender scheduled tasks...");
+            ui.PrintHeading("禁用Windows Defender预定任务...");
             new ScheduledTasksDisabler(defenderScheduledTasks, ui).Run();
         }
     }

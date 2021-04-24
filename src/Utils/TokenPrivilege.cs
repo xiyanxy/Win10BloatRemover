@@ -39,7 +39,7 @@ namespace Win10BloatRemover.Utils
         {
             bool successful = AdjustTokenPrivileges(tokenHandle, false, ref privilegeInfo, 0, IntPtr.Zero, IntPtr.Zero);
             if (!successful || Marshal.GetLastWin32Error() == ERROR_NOT_ALL_ASSIGNED)
-                throw new SecurityException($"Can't adjust token privilege {privilegeName}");
+                throw new SecurityException($"无法调整令牌特权 {privilegeName}");
         }
 
         public void Dispose()

@@ -13,17 +13,17 @@ namespace Win10BloatRemover
 
     class SystemAppsRemovalEnablingEntry : MenuEntry
     {
-        public override string FullName => "Make system apps removable";
+        public override string FullName => "使系统应用程序可移动";
         public override string GetExplanation()
         {
-            return "This procedure will edit an internal database to allow the removal of system UWP apps such as legacy Edge " +
-                   "and Security Center via PowerShell (used by this tool) and in Settings app.\n" +
-                   "It is recommended to create a system restore point before proceeding.\n\n" +
-                   "It is generally safe to remove only those system apps that can be found in Start menu.\n" +
-                   "Certain \"hidden\" apps are there to provide critical OS functionality, and therefore uninstalling " +
-                   "them may lead to an unstable or unusable system: BE CAREFUL.\n\n" +
-                   "Remember also that any system app may be reinstalled after any Windows cumulative update.\n" +
-                   "Before starting, make sure that Microsoft Store is not installing/updating apps in the background.";
+            return "此过程将编辑一个内部数据库，以允许通过PowerShell（此工具使用）和“设置”应用程序" +
+                   "删除系统UWP应用程序，例如旧版Edge和安全中心.\n" +
+                   "建议在继续之前创建系统还原点.\n\n" +
+                   "通常，仅删除可以在\"开始\"菜单中找到的那些系统应用程序是安全的.\n" +
+                   "某些\"隐藏\"应用程序在那里提供关键的系统功能" +
+                   "因此卸载它们可能会导致系统不稳定或无法使用：请当心卸载.\n\n" +
+                   "还请记住，在任何Windows累积更新之后，可能会重新安装任何系统应用程序.\n" +
+                   "在开始之前，请确保微软应用商店不在后台安装或更新应用程序.";
         }
         public override IOperation CreateNewOperation(IUserInterface ui) => new SystemAppsRemovalEnabler(ui);
     }
@@ -34,21 +34,21 @@ namespace Win10BloatRemover
 
         public UWPAppRemovalEntry(Configuration configuration) => this.configuration = configuration;
 
-        public override string FullName => "Remove UWP apps";
+        public override string FullName => "卸载UWP软件";
         public override string GetExplanation()
         {
             string impactedUsers = configuration.UWPAppsRemovalMode == UWPAppRemovalMode.CurrentUser
                 ? "the current user"
-                : "all present and future users";
-            string explanation = $"The following groups of UWP apps will be removed for {impactedUsers}:\n";
+                : "对于所有现在和将来的用户";
+            string explanation = $"以下UWP应用将被删除： {impactedUsers}:\n";
             foreach (UWPAppGroup app in configuration.UWPAppsToRemove)
                 explanation += $"  {app}\n";
 
             if (configuration.UWPAppsRemovalMode == UWPAppRemovalMode.AllUsers)
-                explanation += "\nServices, components and scheduled tasks used specifically by those apps will also " +
-                               "be disabled or removed, together with any leftover data.";
+                explanation += "\n这些应用专门使用的服务，组件和计划任务以及" +
+                               "所有剩余数据也将被禁用或删除.";
 
-            return explanation + "\nIn order to remove some components of Xbox, you need to make system apps removable first.";
+            return explanation + "\n为了删除Xbox的某些组件，您需要首先使系统应用程序可移动(选项0先操作一遍).";
         }
         public override IOperation CreateNewOperation(IUserInterface ui)
             => new UWPAppRemover(configuration.UWPAppsToRemove, configuration.UWPAppsRemovalMode, ui, new ServiceRemover(ui));
@@ -56,15 +56,15 @@ namespace Win10BloatRemover
 
     class DefenderDisablingEntry : MenuEntry
     {
-        public override string FullName => "Disable Windows Defender";
+        public override string FullName => "禁用Windows Defender";
         public override string GetExplanation()
         {
-            return "IMPORTANT: Before starting, disable Tamper protection in Windows Security app " +
-                   "under Virus & threat protection settings.\n" +
-                   "Defender services will be removed and its antimalware engine will be disabled via Group Policies, " +
-                   "together with SmartScreen feature.\n\n" +
-                   "If you have already made system apps removable, Windows Security app will be removed too.\n" +
-                   "Remember that any Windows cumulative update is likely to reinstall the app.";
+            return "重要说明：在开始之前，请在\"病毒和威胁防护\"设置下的 " +
+                   "\"Windows安全\"应用程序中禁用防篡改功能.\n" +
+                   "Defender服务将被删除，其反恶意软件引擎将通过组策略禁用, " +
+                   "与SmartScreen功能一起.\n\n" +
+                   "如果您已经使系统应用程序可移动，则Windows安全应用程序也将被删除.\n" +
+                   "请记住，任何Windows累积更新都可能会重新安装该应用程序.";
         }
 
         public override IOperation CreateNewOperation(IUserInterface ui)
@@ -83,13 +83,13 @@ namespace Win10BloatRemover
 
     class EdgeRemovalEntry : MenuEntry
     {
-        public override string FullName => "Remove Microsoft Edge";
+        public override string FullName => "卸载Microsoft Edge";
         public override string GetExplanation()
         {
-            return "Both Edge Chromium and legacy Edge browser will be uninstalled from the system.\n" +
-                   "In order to be able to uninstall the latter (which gets restored once you uninstall the first), you need to make system apps removable.\n" +
-                   "Take note that both browsers may be reinstalled after any Windows cumulative update.\n" +
-                   "Make sure that Edge Chromium is not updating itself before proceeding.";
+            return "新版Edge和旧版Edge浏览器都将从系统中卸载.\n" +
+                   "为了能够卸载后者（一旦卸载第一个就可以还原），需要使系统应用程序可移动.\n" +
+                   "请注意，在任何Windows累积更新之后，可能会重新安装两个浏览器.\n" +
+                   "在继续之前，请确保新版Edge不会自动更新.";
         }
         public override IOperation CreateNewOperation(IUserInterface ui)
         {
@@ -105,11 +105,11 @@ namespace Win10BloatRemover
 
     class OneDriveRemovalEntry : MenuEntry
     {
-        public override string FullName => "Remove OneDrive";
+        public override string FullName => "卸载OneDrive";
         public override string GetExplanation()
         {
-            return "OneDrive will be disabled using Group Policies and then uninstalled for the current user.\n" +
-                   "Futhermore, it will be prevented from being installed when a new user logs in for the first time.";
+            return "OneDrive将使用组策略禁用，然后为当前用户卸载.\n" +
+                   "此外，将防止新用户首次登录时安装该软件.";
         }
         public override IOperation CreateNewOperation(IUserInterface ui) => new OneDriveRemover(ui);
     }
@@ -120,13 +120,13 @@ namespace Win10BloatRemover
 
         public ServicesRemovalEntry(Configuration configuration) => this.configuration = configuration;
 
-        public override string FullName => "Remove miscellaneous services";
+        public override string FullName => "删除杂项服务";
         public override string GetExplanation()
         {
-            string explanation = "The services starting with the following names will be removed:\n";
+            string explanation = "以以下名称开头的服务将被删除:\n";
             foreach (string service in configuration.ServicesToRemove)
                 explanation += $"  {service}\n";
-            return explanation + "Services will be backed up in the same folder as this program executable.";
+            return explanation + "服务将与此程序可执行文件备份在同一文件夹中.";
         }
         public override IOperation CreateNewOperation(IUserInterface ui)
             => new ServiceRemovalOperation(configuration.ServicesToRemove, ui, new ServiceRemover(ui));
@@ -138,10 +138,10 @@ namespace Win10BloatRemover
 
         public WindowsFeaturesRemovalEntry(Configuration configuration) => this.configuration = configuration;
 
-        public override string FullName => "Remove Windows features";
+        public override string FullName => "删除Windows功能";
         public override string GetExplanation()
         {
-            string explanation = "The following features on demand will be removed:";
+            string explanation = "以下按需功能将被删除:";
             foreach (string feature in configuration.WindowsFeaturesToRemove)
                 explanation += $"\n  {feature}";
             return explanation;
@@ -152,33 +152,32 @@ namespace Win10BloatRemover
 
     class PrivacySettingsTweakEntry : MenuEntry
     {
-        public override string FullName => "Tweak settings for privacy";
+        public override string FullName => "调整隐私设置";
         public override string GetExplanation()
         {
-            return "Several default settings and policies will be changed to make Windows more respectful of user's privacy.\n" +
-                   "These changes consist essentially of:\n" +
-                   "  - adjusting various options under Privacy section of Settings app " +
-                   "(disable advertising ID, app launch tracking etc.)\n" +
-                   "  - preventing input data (inking/typing information, speech) from being sent to Microsoft to improve their services\n" +
-                   "  - denying access to sensitive data (location, documents, activities, account details, diagnostic info)" +
-                   " to all UWP apps by default\n" +
-                   "  - disabling voice activation for voice assistants (so that they can't always be listening)\n" +
-                   "  - disabling cloud synchronization of sensitive data (user activities, clipboard, text messages)\n" +
-                   "  - disabling web search in bottom search bar\n\n" +
-                   "Whereas almost all of these settings are applied for all users, some of them will only be changed " +
-                   "for the current user and for new users created after running this procedure.";
+            return "几个默认设置和策略将被更改，以使Windows更加尊重用户的隐私.\n" +
+                   "这些变化主要包括:\n" +
+                   "  - 在\"设置\"应用的\"隐私\"部分下调整各种选项 " +
+                   "(禁用广告ID，应用启动跟踪等.)\n" +
+                   "  - 防止将输入数据(墨迹书写/键入个性化，语音)发送给Microsoft以改善其服务\n" +
+                   "  - 默认情况下，拒绝所有UWP应用访问(位置，文档，活动，帐户详细信息，诊断信息)\n" +
+                   "  - 禁用语音助手的语音激活(这样它们就不能总是在听)\n" +
+                   "  - 禁用敏感数据(用户活动，剪贴板，文本消息)的云同步\n" +
+                   "  - 在底部搜索栏中禁用网页搜索\n\n" +
+                   "尽管几乎所有这些设置都适用于所有用户，但是其中某些设置仅" +
+                   "适用于当前用户和运行此过程之后创建的新用户.";
         }
         public override IOperation CreateNewOperation(IUserInterface ui) => new PrivacySettingsTweaker(ui);
     }
 
     class TelemetryDisablingEntry : MenuEntry
     {
-        public override string FullName => "Disable telemetry";
+        public override string FullName => "禁用微软远程接收测试数据";
         public override string GetExplanation()
         {
-            return "This procedure will disable scheduled tasks, services and features that are responsible for " +
-                   "collecting and reporting data to Microsoft, including Compatibility Telemetry, Device Census, " +
-                   "Customer Experience Improvement Program and Compatibility Assistant.";
+            return "此过程将禁用计划的任务，服务和功能，这些任务，服务和功能负责收集和\n" +
+                   "向Microsoft报告数据，包括兼容性遥测，设备普查," +
+                   "客户体验改善计划和兼容性助手.";
         }
         public override IOperation CreateNewOperation(IUserInterface ui)
             => new TelemetryDisabler(ui, new ServiceRemover(ui));
@@ -186,11 +185,11 @@ namespace Win10BloatRemover
 
     class AutoUpdatesDisablingEntry : MenuEntry
     {
-        public override string FullName => "Disable automatic updates";
+        public override string FullName => "禁用自动更新";
         public override string GetExplanation()
         {
-            return "Automatic updates for Windows, Store apps and speech models will be disabled using Group Policies.\n" + 
-                   "At least Windows 10 Pro edition is required to disable automatic Windows updates.";
+            return "Windows，商店应用和语音模型的自动更新将使用组策略禁用.\n" +
+                   "至少需要Windows 10 专业版才能禁用Windows自动更新.";
         }
         public override IOperation CreateNewOperation(IUserInterface ui) => new AutoUpdatesDisabler(ui);
     }
@@ -201,10 +200,10 @@ namespace Win10BloatRemover
 
         public ScheduledTasksDisablingEntry(Configuration configuration) => this.configuration = configuration;
 
-        public override string FullName => "Disable miscellaneous scheduled tasks";
+        public override string FullName => "禁用其他计划任务";
         public override string GetExplanation()
         {
-            string explanation = "The following scheduled tasks will be disabled:";
+            string explanation = "以下计划任务将被禁用:";
             foreach (string task in configuration.ScheduledTasksToDisable)
                 explanation += $"\n  {task}";
             return explanation;
@@ -215,11 +214,11 @@ namespace Win10BloatRemover
 
     class ErrorReportingDisablingEntry : MenuEntry
     {
-        public override string FullName => "Disable Windows Error Reporting";
+        public override string FullName => "禁用Windows错误报告";
         public override string GetExplanation()
         {
-            return "Windows Error Reporting will disabled by editing Group Policies, as well as by removing " +
-                   "its services (after backing them up).";
+            return "通过编辑组策略以及删除其服务(在备份它们之后)，" +
+                   "将禁用Windows错误报告.";
         }
         public override IOperation CreateNewOperation(IUserInterface ui)
             => new ErrorReportingDisabler(ui, new ServiceRemover(ui));
@@ -227,25 +226,22 @@ namespace Win10BloatRemover
 
     class TipsAndFeedbackDisablingEntry : MenuEntry
     {
-        public override string FullName => "Disable tips and feedback requests";
+        public override string FullName => "禁用提示和反馈请求";
         public override string GetExplanation()
         {
-            return "Feedback notifications/requests, apps suggestions, tips and Spotlight (including dynamic lock " +
-                   "screen backgrounds) will be turned off by setting Group Policies accordingly and by disabling " +
-                   "some related scheduled tasks.\n\n" +
-                   "Be aware that some of these features will be disabled only for the currently logged in user " +
-                   "and for new users created after running this procedure.";
+            return "反馈通知/请求，应用程序建议，提示和Spotlight(包括动态锁定屏幕背景)" +
+                   "将通过相应地设置组策略和\n禁用一些相关的计划任务来关闭\n\n" +
+                   "请注意，其中某些功能仅适用于当前登录的用户和运行此过程之后创建的新用户";
         }
         public override IOperation CreateNewOperation(IUserInterface ui) => new TipsDisabler(ui);
     }
 
     class NewGitHubIssueEntry : MenuEntry
     {
-        public override string FullName => "Report an issue/Suggest a feature";
+        public override string FullName => "报告问题/建议功能";
         public override string GetExplanation()
         {
-            return "You will now be brought to a web page where you can open a GitHub issue " +
-                   "in order to report a bug or to suggest a new feature.";
+            return "现在将带您到一个网页，您可以在其中打开GitHub问题，以报告错误或提出新功能";
         }
         public override IOperation CreateNewOperation(IUserInterface ui)
             => new BrowserOpener("https://github.com/Fs00/Win10BloatRemover/issues/new");
@@ -253,19 +249,19 @@ namespace Win10BloatRemover
 
     class AboutEntry : MenuEntry
     {
-        public override string FullName => "About this program";
+        public override string FullName => "关于";
         public override string GetExplanation()
         {
             Version programVersion = GetType().Assembly.GetName().Version!;
-            return $"Windows 10 Bloat Remover and Tweaker {programVersion.Major}.{programVersion.Minor} " +
-                   $"for Windows version {programVersion.Build}\n" +
-                   "Developed by Fs00\n" +
-                   "Official GitHub repository: github.com/Fs00/Win10BloatRemover\n\n" +
-                   "Originally based on Windows 10 de-botnet guide by Federico Dossena: http://fdossena.com\n" +
-                   "Credits to all open source projects whose work has been used to improve this software:\n" +
-                   "  - privacy.sexy website: github.com/undergroundwires/privacy.sexy\n" +
-                   "  - Debloat Windows 10 scripts: github.com/W4RH4WK/Debloat-Windows-10\n\n" +
-                   "This software is released under BSD 3-Clause Clear license (continue to read full text).";
+            return $"Windows 10 修改器 {programVersion.Major}.{programVersion.Minor} " +
+                   $"对于Windows版本 {programVersion.Build}\n" +
+                   "由Fs00开发，由曦颜XY(Github: Vaimibao或xiyanxy)汉化\n" +
+                   "官方GitHub存储库: github.com/Fs00/Win10BloatRemover\n\n" +
+                   "最初基于Federico Dossena的Windows 10隐私控制管理指南: http://fdossena.com\n" +
+                   "归功于其工作已用于改进该软件的所有开源项目:\n" +
+                   "  - privacy.sexy网站: github.com/undergroundwires/privacy.sexy\n" +
+                   "  - 瘦身Windows 10脚本: github.com/W4RH4WK/Debloat-Windows-10\n\n" +
+                   "该软件根据BSD 3-Clause Clear许可证发行（继续阅读全文）.";
         }
         public override IOperation CreateNewOperation(IUserInterface ui) => new LicensePrinter(ui);
     }
@@ -276,9 +272,9 @@ namespace Win10BloatRemover
 
         public QuitEntry(RebootRecommendedFlag rebootFlag) => this.rebootFlag = rebootFlag;
 
-        public override string FullName => "Exit the application";
+        public override string FullName => "退出";
         public override bool ShouldQuit => true;
-        public override string GetExplanation() => "Are you sure?";
+        public override string GetExplanation() => "确定退出吗?";
         public override IOperation CreateNewOperation(IUserInterface ui) => new AskForRebootOperation(ui, rebootFlag);
     }
 }

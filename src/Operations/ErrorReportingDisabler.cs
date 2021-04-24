@@ -29,7 +29,7 @@ namespace Win10BloatRemover.Operations
         
         private void DisableErrorReporting()
         {
-            ui.PrintHeading("Writing values into the Registry...");
+            ui.PrintHeading("将值写入注册表...");
             Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled", 1);
             Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting", "DoReport", 0);
             Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1);
@@ -37,14 +37,14 @@ namespace Win10BloatRemover.Operations
 
         private void RemoveErrorReportingServices()
         {
-            ui.PrintHeading("Backing up and removing error reporting services...");
+            ui.PrintHeading("备份和删除错误报告服务...");
             serviceRemover.BackupAndRemove(errorReportingServices);
             IsRebootRecommended = serviceRemover.IsRebootRecommended;
         }
         
         private void DisableErrorReportingScheduledTasks()
         {
-            ui.PrintHeading("Disabling error reporting scheduled tasks...");
+            ui.PrintHeading("禁用错误报告计划任务...");
             new ScheduledTasksDisabler(errorReportingScheduledTasks, ui).Run();
         }
     }

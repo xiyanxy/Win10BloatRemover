@@ -25,12 +25,12 @@ namespace Win10BloatRemover.Operations
 
         public void Run()
         {
-            ui.PrintHeading("Backing up services...");
+            ui.PrintHeading("备份服务...");
             string[] actualBackuppedServices = serviceRemover.PerformBackup(servicesToRemove);
 
             if (actualBackuppedServices.Length > 0)
             {
-                ui.PrintHeading("Removing services...");
+                ui.PrintHeading("移除服务...");
                 serviceRemover.PerformRemoval(actualBackuppedServices);
             }
         }
@@ -79,7 +79,7 @@ namespace Win10BloatRemover.Operations
             {
                 var matchingServices = allExistingServices.Where(name => name.StartsWith(serviceName)).ToArray();
                 if (matchingServices.Length == 0)
-                    ui.PrintMessage($"No services found with name {serviceName}.");
+                    ui.PrintMessage($"找不到名称为 {serviceName} 的服务.");
                 else
                     allMatchingServices.AddRange(matchingServices);
             }
@@ -99,9 +99,9 @@ namespace Win10BloatRemover.Operations
             var regExportExitCode = SystemUtils.RunProcessBlocking(
                 "reg", $@"export ""HKLM\SYSTEM\CurrentControlSet\Services\{service}"" ""{backupDirectory.FullName}\{service}.reg""");
             if (regExportExitCode.IsSuccessful())
-                ui.PrintMessage($"Service {service} backed up.");
+                ui.PrintMessage($"服务{service} 完成备份.");
             else
-                throw new Exception($"Could not backup service {service}.");
+                throw new Exception($"无法备份 {service} 服务.");
         }
 
         private void EnsureBackupDirectoryExists()
@@ -129,7 +129,7 @@ namespace Win10BloatRemover.Operations
             {
                 // Unstoppable (but not protected) system services are not removable with SC,
                 // but can be removed by deleting their Registry keys
-                Debug.WriteLine($"SC removal failed with exit code {scExitCode} for service {service}.");
+                Debug.WriteLine($"对于 {service} SC删除失败，并显示退出代码 {scExitCode}.");
                 DeleteServiceRegistryKey(service);
             }
         }
@@ -143,9 +143,9 @@ namespace Win10BloatRemover.Operations
         private void PrintSuccessMessage(ExitCode scExitCode, string service)
         {
             if (scExitCode == SC_EXIT_CODE_MARKED_FOR_DELETION)
-                ui.PrintMessage($"Service {service} will be removed after reboot.");
+                ui.PrintMessage($"服务 {service} 将在系统重启后完成移除.");
             else
-                ui.PrintMessage($"Service {service} removed successfully.");
+                ui.PrintMessage($"服务 {service} 成功移除.");
         }
 
         private void DeleteServiceRegistryKey(string service)
@@ -154,12 +154,12 @@ namespace Win10BloatRemover.Operations
             {
                 using var allServicesKey = Registry.LocalMachine.OpenSubKeyWritable(@"SYSTEM\CurrentControlSet\Services");
                 allServicesKey.DeleteSubKeyTree(service);
-                ui.PrintMessage($"Service {service} removed, but it will continue to run until the next restart.");
+                ui.PrintMessage($"服务 {service} 已移除, 但它将继续运行，直到下一次系统重新启动.");
                 IsRebootRecommended = true;
             }
             catch (Exception exc)
             {
-                ui.PrintError($"Service {service} removal failed: couldn't delete its registry keys ({exc.Message}).");
+                ui.PrintError($"服务 {service} 移除失败: 无法删除其注册表项 ({exc.Message}).");
             }
         }
     }

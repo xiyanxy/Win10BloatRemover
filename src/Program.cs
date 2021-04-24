@@ -13,7 +13,7 @@ namespace Win10BloatRemover
         private static void Main()
         {
             Trace.Listeners.Add(new ConsoleTraceListener());
-            Console.Title = "Windows 10 Bloat Remover and Tweaker";
+            Console.Title = "Windows 10 修改器";
 
             EnsureProgramIsRunningAsAdmin();
             ShowWarningIfRunningOnIncompatibleOS();
@@ -51,7 +51,7 @@ namespace Win10BloatRemover
         {
             if (!Program.HasAdministratorRights())
             {
-                ConsoleHelpers.WriteLine("This application needs to be run with administrator rights!", ConsoleColor.Red);
+                ConsoleHelpers.WriteLine("此应用程序需要以管理员权限运行!", ConsoleColor.Red);
                 Console.ReadKey();
                 Environment.Exit(-1);
             }
@@ -63,19 +63,19 @@ namespace Win10BloatRemover
             if (installedWindowsVersion != SUPPORTED_WINDOWS_RELEASE_ID)
             {
                 ConsoleHelpers.WriteLine(
-                    "-- INCOMPATIBILITY WARNING --\n\n" +
-                    $"This version of the program only supports Windows 10 {SUPPORTED_WINDOWS_RELEASE_NAME} (version {SUPPORTED_WINDOWS_RELEASE_ID}).\n" +
-                    $"You are running Windows 10 version {installedWindowsVersion}.\n\n" +
-                    "You should download a version of the program which is compatible with this Windows 10 version at the following page:",
+                    "-- 兼容性警告 --\n\n" +
+                    $"此版本的程序仅支持Windows 10 {SUPPORTED_WINDOWS_RELEASE_NAME} (版本 {SUPPORTED_WINDOWS_RELEASE_ID}).\n" +
+                    $"您正在运行Windows 10版本 {installedWindowsVersion}.\n\n" +
+                    "您应该在下面链接下载与此Windows 10版本兼容的程序版本:",
                     ConsoleColor.DarkYellow);
                 Console.WriteLine("  https://github.com/Fs00/Win10BloatRemover/releases/\n");
                 ConsoleHelpers.WriteLine(
-                    "If a compatible version is not available yet, you can still continue using this program.\n" +
-                    "However, BE AWARE that some features might work badly or not at all, and could even have unintended effects\n" +
-                    "on your system (including corruptions or instability).\n" +
-                    "PROCEED AT YOUR OWN RISK.", ConsoleColor.DarkYellow);
+                    "如果尚没有兼容版本，您仍然可以继续使用该程序.\n" +
+                    "但是，请注意，某些功能可能无法正常工作或根本无法工作，甚至可能会产生意想不到的效果\n" +
+                    "在您的系统上（包括系统损坏或不稳定）.\n" +
+                    "继续需要您自担风险.", ConsoleColor.DarkYellow);
                 
-                Console.WriteLine("\nPress enter to continue, or another key to quit.");
+                Console.WriteLine("\n按Enter继续，或按任意键键退出.");
                 if (Console.ReadKey().Key != ConsoleKey.Enter)
                     Environment.Exit(-1);
             }
@@ -96,7 +96,7 @@ namespace Win10BloatRemover
             catch (ConfigurationException exc)
             {
                 ConsoleHelpers.WriteLine(exc.Message, ConsoleColor.DarkYellow);
-                Console.WriteLine("Press a key to continue to the main menu.");
+                Console.WriteLine("按任意键返回主菜单.");
                 Console.ReadKey();
                 return Configuration.Default;
             }

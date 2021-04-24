@@ -2,12 +2,12 @@
 using System.Runtime.InteropServices;
 using Win10BloatRemover;
 
-[assembly: AssemblyTitle("Windows 10 Bloat Remover")]
+[assembly: AssemblyTitle("Windows 10 修改器")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Windows 10 Bloat Remover")]
-[assembly: AssemblyCopyright("Developed by Fs00")]
+[assembly: AssemblyProduct("Windows 10 修改器")]
+[assembly: AssemblyCopyright("由Fs00开发")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

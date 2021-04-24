@@ -26,7 +26,7 @@ namespace Win10BloatRemover.Operations
         {
             var choice = AskUserConsent(text);
             if (choice == UserChoice.No)
-                throw new Exception("The user aborted the operation.");
+                throw new Exception("用户中止操作.");
         }
     }
 }

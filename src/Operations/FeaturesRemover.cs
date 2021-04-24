@@ -35,7 +35,7 @@ namespace Win10BloatRemover.Operations
             var capabilities = powerShell.Run($"Get-WindowsCapability -Online -Name {capabilityName}*");
             if (capabilities.Length == 0)
             {
-                ui.PrintWarning($"No features found with name {capabilityName}.");
+                ui.PrintWarning($"找不到具有名称的功能 {capabilityName}.");
                 return;
             }
 
@@ -47,11 +47,11 @@ namespace Win10BloatRemover.Operations
         {
             if (capability.State.ToString() != "Installed")
             {
-                ui.PrintMessage($"Feature {capability.Name} is not installed.");
+                ui.PrintMessage($"{capability.Name} 功能尚未安装.");
                 return;
             }
 
-            ui.PrintMessage($"Removing feature {capability.Name}...");
+            ui.PrintMessage($"移除 {capability.Name} 功能...");
             var result = powerShell.Run($"Remove-WindowsCapability -Online -Name {capability.Name}").First();
             if (result.RestartNeeded)
                 IsRebootRecommended = true;

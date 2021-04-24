@@ -19,7 +19,7 @@ namespace Win10BloatRemover.Utils
                 "reg", $@"load ""{DEFAULT_USER_HIVE_PATH}"" ""C:\Users\Default\NTUSER.DAT"""
             );
             if (loadExitCode.IsNotSuccessful())
-                throw new Exception("Unable to load Default user registry hive.");
+                throw new Exception("无法加载默认用户注册表配置单元.");
 
             AssemblyLoadContext.Default.Unloading += _ => UnloadDefaultUserHive();
             return Registry.Users.OpenSubKeyWritable("_loaded_Default");
@@ -89,6 +89,6 @@ namespace Win10BloatRemover.Utils
         }
 
         private static SecurityIdentifier RetrieveCurrentUserIdentifier() 
-            => WindowsIdentity.GetCurrent().User ?? throw new Exception("Unable to retrieve current user SID.");
+            => WindowsIdentity.GetCurrent().User ?? throw new Exception("无法检索当前用户SID.");
     }
 }
