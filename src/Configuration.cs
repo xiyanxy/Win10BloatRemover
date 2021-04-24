@@ -54,8 +54,8 @@ namespace Win10BloatRemover
             }
             catch (Exception exc)
             {
-                throw new ConfigurationException($"Error when loading custom settings file: {exc.Message}\n" +
-                                                 "Default settings have been loaded instead.\n");
+                throw new ConfigurationException($"加载自定义设置文件时出错: {exc.Message}\n" +
+                                                 "默认设置已加载.\n");
             }
         }
 
@@ -68,7 +68,7 @@ namespace Win10BloatRemover
             }
             catch (Exception exc)
             {
-                throw new ConfigurationException($"Can't write configuration file with default settings: {exc.Message}\n");
+                throw new ConfigurationException($"无法使用默认设置写入配置文件: {exc.Message}\n");
             }
         }
 

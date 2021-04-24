@@ -23,7 +23,7 @@ namespace Win10BloatRemover.Operations
 
         private void DisableOneDrive()
         {
-            ui.PrintMessage("Disabling OneDrive via registry edits...");
+            ui.PrintMessage("通过注册表编辑禁用OneDrive...");
             Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OneDrive", "DisableFileSyncNGSC", 1);
             using RegistryKey localMachine = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
             using RegistryKey key = localMachine.CreateSubKey(@"SOFTWARE\Microsoft\OneDrive");
@@ -32,14 +32,14 @@ namespace Win10BloatRemover.Operations
 
         private void RunOneDriveUninstaller()
         {
-            ui.PrintMessage("Executing OneDrive uninstaller...");
+            ui.PrintMessage("执行OneDrive卸载程序...");
             string setupPath = RetrieveOneDriveSetupPath();
             var uninstallationExitCode = SystemUtils.RunProcessBlockingWithOutput(setupPath, "/uninstall", ui);
             if (uninstallationExitCode.IsNotSuccessful())
             {
-                ui.PrintError("Uninstallation failed due to an unknown error.");
-                ui.ThrowIfUserDenies("Do you still want to continue the process by removing all leftover OneDrive " +
-                                     "files (including its application files for the current user) and registry keys?");
+                ui.PrintError("由于未知错误，卸载失败.");
+                ui.ThrowIfUserDenies("您是否仍要通过删除所有剩余的OneDrive来继续该过程，" +
+                                     "如文件(包括当前用户的应用程序文件)和注册表项?");
             }
         }
 
@@ -53,7 +53,7 @@ namespace Win10BloatRemover.Operations
 
         private void RemoveOneDriveLeftovers()
         {
-            ui.PrintMessage("Removing OneDrive leftovers...");
+            ui.PrintMessage("删除OneDrive剩余文件...");
             SystemUtils.KillProcess("explorer");
             RemoveResidualFiles();
             RemoveResidualRegistryKeys();
@@ -81,7 +81,7 @@ namespace Win10BloatRemover.Operations
         // Borrowed from github.com/W4RH4WK/Debloat-Windows-10/blob/master/scripts/remove-onedrive.ps1
         private void DisableAutomaticSetupForNewUsers()
         {
-            ui.PrintMessage("Disabling automatic OneDrive setup for new users...");
+            ui.PrintMessage("为新用户禁用自动OneDrive设置...");
             RegistryUtils.DefaultUser.DeleteSubKeyValue(@"Software\Microsoft\Windows\CurrentVersion\Run", "OneDriveSetup");
         }
     }

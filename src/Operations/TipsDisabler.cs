@@ -16,7 +16,7 @@ namespace Win10BloatRemover.Operations
 
         private void DisableTips()
         {
-            ui.PrintHeading("Disabling Tips and Spotlight via Registry edits...");
+            ui.PrintHeading("通过注册表编辑禁用提示和Spotlight...");
 
             // These two policies work only on Education and Enterprise editions
             Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableSoftLanding", 1);
@@ -58,13 +58,13 @@ namespace Win10BloatRemover.Operations
 
         private void DisableFeedbackRequests()
         {
-            ui.PrintHeading("Disabling feedback requests via Registry edits...");
+            ui.PrintHeading("通过注册表编辑禁用反馈请求...");
             Registry.SetValue(
                 @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection",
                 "DoNotShowFeedbackNotifications", 1);
             RegistryUtils.SetForCurrentAndDefaultUser(@"SOFTWARE\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod", 0);
 
-            ui.PrintHeading("Disabling feedback-related scheduled tasks...");
+            ui.PrintHeading("禁用与反馈相关的计划任务...");
             new ScheduledTasksDisabler(new[] {
                 @"\Microsoft\Windows\Feedback\Siuf\DmClient",
                 @"\Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload"

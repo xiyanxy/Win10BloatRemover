@@ -39,7 +39,7 @@ namespace Win10BloatRemover.Operations
                     if (outcome == EditingOutcome.ContentWasUpdated)
                         ReplaceStateRepositoryDatabaseWith(temporaryDatabaseCopy);
                     else
-                        ui.PrintNotice("Original database doesn't need to be replaced: no changes have been made.");
+                        ui.PrintNotice("原始数据库无需更换：未进行任何更改.");
                 }
                 finally
                 {
@@ -59,7 +59,7 @@ namespace Win10BloatRemover.Operations
 
         private EditingOutcome EditStateRepositoryDatabase(string databaseCopyPath)
         {
-            ui.PrintHeading("Editing a temporary copy of state repository database...");
+            ui.PrintHeading("编辑状态存储库数据库的临时副本...");
             using (dbConnection = new SqliteConnection($"Data Source={databaseCopyPath}"))
             {
                 dbConnection.Open();
@@ -72,24 +72,24 @@ namespace Win10BloatRemover.Operations
                 if (createTriggerCode != null)
                     ReAddAfterPackageUpdateTrigger(createTriggerCode);
 
-                ui.PrintMessage($"Edited {updatedRows} {(updatedRows == 1 ? "row" : "rows")}.");
+                ui.PrintMessage($"修改 {updatedRows} {(updatedRows == 1 ? "row" : "rows")}.");
                 return updatedRows == 0 ? EditingOutcome.NoChangesMade : EditingOutcome.ContentWasUpdated;
             }
         }
 
         private void ReplaceStateRepositoryDatabaseWith(string databaseCopyPath)
         {
-            ui.PrintHeading("Replacing original state repository database with the edited copy...");
+            ui.PrintHeading("用编辑后的副本替换原始状态存储库数据库...");
             EnsureAppXServicesAreStopped();
             // File.Copy can't be used to replace the file because it fails with access denied
             // even though we have Restore privilege, so we need to use File.Move instead
             File.Move(databaseCopyPath, STATE_REPOSITORY_DB_PATH, overwrite: true);
-            ui.PrintMessage("Replacement successful.");
+            ui.PrintMessage("替换完成.");
         }
 
         private void EnsureAppXServicesAreStopped()
         {
-            ui.PrintMessage("Making sure AppX-related services are stopped before proceeding...");
+            ui.PrintMessage("在继续操作之前，请确保已停止与AppX相关的服务...");
             // Workaround for some rare circumstances in which attempts to stop these services fail for no apparent reason
             int currentAttempt = 1;
             bool servicesStoppedSuccessfully = false;
@@ -102,7 +102,7 @@ namespace Win10BloatRemover.Operations
                 }
                 catch
                 {
-                    Debug.WriteLine($"Failed attempt {currentAttempt}.");
+                    Debug.WriteLine($"尝试失败 {currentAttempt}.");
                     if (currentAttempt == 3)
                         throw;
                     currentAttempt++;

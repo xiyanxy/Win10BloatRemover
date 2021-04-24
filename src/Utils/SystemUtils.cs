@@ -38,7 +38,7 @@ namespace Win10BloatRemover.Utils
 
         public static void ExecuteWindowsPromptCommand(string command, IMessagePrinter printer)
         {
-            Debug.WriteLine($"Command executed: {command}");
+            Debug.WriteLine($"命令执行: {command}");
             RunProcessBlockingWithOutput("cmd.exe", $@"/c ""{command}""", printer);
         }
 
@@ -113,7 +113,7 @@ namespace Win10BloatRemover.Utils
             }
             catch (Exception exc)
             {
-                printer.PrintError($"An error occurred when deleting folder {path}: {exc.Message}");
+                printer.PrintError($"删除文件夹时发生错误 {path}: {exc.Message}");
             }
         }
 

@@ -53,7 +53,7 @@ namespace Win10BloatRemover.Operations
 
         private void RemoveTelemetryServices()
         {
-            ui.PrintHeading("Backing up and removing telemetry services...");
+            ui.PrintHeading("备份和删除微软远程接收系统测试数据服务...");
             serviceRemover.BackupAndRemove(telemetryServices);
             if (serviceRemover.IsRebootRecommended)
                 IsRebootRecommended = true;
@@ -77,12 +77,12 @@ namespace Win10BloatRemover.Operations
             try
             {
                 RemoveProtectedService(serviceName, allServicesKey);
-                ui.PrintMessage($"Service {serviceName} removed, but it will continue to run until the next restart.");
+                ui.PrintMessage($"服务 {serviceName} 已移除, 但它将继续运行，直到下一次系统重新启动.");
                 IsRebootRecommended = true;
             }
             catch (Exception exc)
             {
-                ui.PrintError($"Error while trying to delete service {serviceName}: {exc.Message}");
+                ui.PrintError($"尝试删除服务时出错 {serviceName}: {exc.Message}");
             }
         }
 
@@ -102,7 +102,7 @@ namespace Win10BloatRemover.Operations
 
         private void DisableTelemetryFeatures()
         {
-            ui.PrintHeading("Performing some registry edits to disable telemetry features...");
+            ui.PrintHeading("执行一些注册表编辑以禁用微软远程接收系统测试数据功能..");
             Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowTelemetry", 0);
             using (RegistryKey key = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Policies\Microsoft\Windows\AppCompat"))
             {
@@ -129,7 +129,7 @@ namespace Win10BloatRemover.Operations
 
         private void DisableTelemetryScheduledTasks()
         {
-            ui.PrintHeading("Disabling telemetry-related scheduled tasks...");
+            ui.PrintHeading("禁用与微软远程接收系统测试数据相关的计划任务...");
             new ScheduledTasksDisabler(telemetryScheduledTasks, ui).Run();
         }
     }

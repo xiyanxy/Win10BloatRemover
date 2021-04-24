@@ -29,15 +29,15 @@ namespace Win10BloatRemover.Operations
 
         private void UninstallEdgeChromiumIfPresent()
         {
-            ui.PrintHeading("Removing Edge Chromium...");
+            ui.PrintHeading("卸载新版Edge...");
             string? installerPath = RetrieveEdgeChromiumInstallerPath();
             if (installerPath == null)
             {
-                ui.PrintMessage("Edge Chromium is not installed.");
+                ui.PrintMessage("新版Edge尚未安装.");
                 return;
             }
 
-            ui.PrintMessage("Running uninstaller...");
+            ui.PrintMessage("运行卸载程序...");
             SystemUtils.RunProcessBlocking(installerPath, "--uninstall --force-uninstall --system-level");
             // Since actual uninstallation happens in another process launched by the installer, we wait
             // for a reasonable amount of time to let this process do its work before continuing
@@ -59,7 +59,7 @@ namespace Win10BloatRemover.Operations
                 string installerPath = $@"{folderOfSpecificEdgeVersion}\Installer\setup.exe";
                 if (File.Exists(installerPath))
                 {
-                    ui.PrintMessage($"Detected Edge Chromium version {edgeChromiumVersion}.");
+                    ui.PrintMessage($"检测到的新版Edge版本 {edgeChromiumVersion}.");
                     return installerPath;
                 }
             }
@@ -68,7 +68,7 @@ namespace Win10BloatRemover.Operations
 
         private void BlockAutomaticUpdateToEdgeChromium()
         {
-            ui.PrintMessage("Blocking automatic delivery of Edge Chromium via Windows Update...");
+            ui.PrintMessage("通过Windows系统更新阻止新版Edge自动安装...");
             Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\EdgeUpdate", "DoNotUpdateToEdgeWithChromium", 1);
         }
     }

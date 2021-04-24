@@ -18,8 +18,8 @@ namespace Win10BloatRemover.Operations
         {
             if (rebootFlag.IsRebootRecommended)
             {
-                ui.PrintWarning("You have executed one or more operations that require a system reboot to take full effect.");
-                var choice = ui.AskUserConsent("Do you want to reboot now?");
+                ui.PrintWarning("您已执行一项或多项操作，需要重新启动系统才能完全生效.");
+                var choice = ui.AskUserConsent("现在可以重启吗?");
                 if (choice == UserChoice.Yes)
                     SystemUtils.RebootSystem();
             }

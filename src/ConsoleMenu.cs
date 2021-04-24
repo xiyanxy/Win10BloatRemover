@@ -38,15 +38,15 @@ namespace Win10BloatRemover
         private void PrintHeading()
         {
             Console.WriteLine("┌────────────────────────────────────────────┐");
-            Console.WriteLine("│    Windows 10 Bloat Remover and Tweaker    │");
-            Console.WriteLine($"│                version {programVersion.Major}.{programVersion.Minor}                 │");
+            Console.WriteLine("│        Windows 10 修改器_曦颜XY汉化        │");
+            Console.WriteLine($"│                 版本: {programVersion.Major}.{programVersion.Minor}                  │");
             Console.WriteLine("└────────────────────────────────────────────┘");
             Console.WriteLine();
         }
 
         private void PrintMenuEntries()
         {
-            ConsoleHelpers.WriteLine("-- MENU --", ConsoleColor.Green);
+            ConsoleHelpers.WriteLine("-- 菜单 --", ConsoleColor.Green);
             for (int i = 0; i < entries.Length; i++)
             {
                 ConsoleHelpers.Write($"{i}: ", ConsoleColor.Green);
@@ -61,10 +61,10 @@ namespace Win10BloatRemover
             bool isUserInputCorrect = false;
             while (!isUserInputCorrect)
             {
-                Console.Write("Choose an operation: ");
+                Console.Write("选项: ");
                 chosenEntry = GetEntryCorrespondingToUserInput(Console.ReadLine());
                 if (chosenEntry == null)
-                    ConsoleHelpers.WriteLine("Incorrect input. Must be a valid menu entry number.", ConsoleColor.Red);
+                    ConsoleHelpers.WriteLine("输入错误. 必须是有效的菜单项序号。", ConsoleColor.Red);
                 else
                     isUserInputCorrect = true;
             }
@@ -88,7 +88,7 @@ namespace Win10BloatRemover
 
         private bool UserWantsToProceed()
         {
-            Console.WriteLine("\nPress enter to continue, or another key to go back to the menu.");
+            Console.WriteLine("\n按Enter键继续，或按其他键返回菜单.");
             return Console.ReadKey().Key == ConsoleKey.Enter;
         }
 
@@ -101,7 +101,7 @@ namespace Win10BloatRemover
                 operation.Run();
                 if (operation.IsRebootRecommended)
                 {
-                    ConsoleHelpers.WriteLine("\nA system reboot is recommended.", ConsoleColor.Cyan);
+                    ConsoleHelpers.WriteLine("\n建议系统重启一下.", ConsoleColor.Cyan);
                     rebootFlag.SetRebootRecommended();
                 }
 
@@ -111,11 +111,11 @@ namespace Win10BloatRemover
                     return;
                 }
 
-                Console.Write("\nDone! ");
+                Console.Write("\n完成! ");
             }
             catch (Exception exc)
             {
-                ConsoleHelpers.WriteLine($"Operation failed: {exc.Message}", ConsoleColor.Red);
+                ConsoleHelpers.WriteLine($"修改失败: {exc.Message}", ConsoleColor.Red);
                 #if DEBUG
                 ConsoleHelpers.WriteLine(exc.StackTrace, ConsoleColor.Red);
                 #endif
@@ -123,7 +123,7 @@ namespace Win10BloatRemover
             }
 
             ConsoleHelpers.FlushStandardInput();
-            Console.WriteLine("Press a key to return to the main menu");
+            Console.WriteLine("按任意键返回主菜单");
             Console.ReadKey();
         }
     }
